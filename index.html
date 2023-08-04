@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+  <!-- table to excel -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.core.min.js"></script>
+  <script src="https://unpkg.com/tableexport@5.2.0/dist/js/tableexport.min.js"></script>
+
+
+</head>
+<body>
+  <div class="keydata">
+    <label>data1: </label><input name="bakery_data1" placeholder="data1"></input>
+    <label>data2: </label><input name="bakery_data2" placeholder="data2"></input>
+    <label>data3: </label><input name="bakery_data3" placeholder="data3"></input>
+    <button id="enterdata">ENTER</button>
+    <table id="showdata">
+        <tr><th>data1</th><th>data2</th><th>data3</th></tr>
+    </table>
+  </div>
+
+  <button id="bakery_count">COUNTER</button>
+
+  <table id="datatable">
+    <tr><th>table</th></tr>
+
+
+
+  </table>
+
+  <script>
+    $(document).ready(function(){
+
+      $(".keydata input").on('keydown', function(e) {
+        if (e.which === 13) { //keyboard = enter
+            console.log(e.which);
+          if($(this).next().next('input').length != 0){
+            $(this).next().next('input').focus();
+          }else{
+            //
+            if( $('[name="bakery_data1"]').val() != '' ){
+              $('#showdata').append('<tr><td>'+$('[name="bakery_data1"]').val()+'</td><td>'+$('[name="bakery_data2"]').val()+'</td><td>'+$('[name="bakery_data3"]').val()+'</td></tr>');
+            }
+            $(".keydata input").first().focus(); //回到第一格
+            $(".keydata input").each(function(){ $(this).val(''); })//全部清空
+          }
+        }
+      });
+
+
+      $('#bakery_count').on('click',function(e){
+        e.preventDefault();
+        var myRows = [];
+        var $rows = $("#showdata tr").each(function(index) {
+          $cells = $(this).find("td");
+          myRows[index] = {};
+          $cells.each(function(cellIndex) {
+            myRows[index][cellIndex] = $(this).html();
+          });
+        });
+
+
+        $("table").tableExport({
+          formats: ["xlsx", "csv", "txt"],
+        });
+
+        //console.log(myRows);
+        /*
+        var inputval = $('[name="bakery_data"]').val();
+        if( inputval != '' ){
+          console.log(inputval);
+        }
+        */
+      });
+
+    });
+
+
+
+
+  </script>
+</body>
+</html>
